@@ -24,6 +24,7 @@ webusb.request = function () {
 
 webusb.Device = function (dev) {
   this.device = dev;
+  this.queue = [];
 };
 
 webusb.Device.prototype.connect = function () {
@@ -65,12 +66,36 @@ webusb.Device.prototype.disconnect = function () {
   return this.device.close();
 };
 
-webusb.Device.prototype.send = function (data) {
+webusb.Device.prototype.sendRaw = function (data) {
   const {
     endpointNumber
   } = this.device.configuration.interfaces[0].alternate.endpoints[1];
   return this.device.transferOut(endpointNumber, data);
 };
+
+webusb.Device.prototype.send = function(data) {
+  var sendLoop = () => {
+    if (this.queue.length > 0) {
+      let data = this.queue[0];
+      return this.sendRaw(data).then((result) => {
+        console.log(result);
+        this.queue.shift();
+        return sendLoop();
+      });
+    }
+  }
+
+  let view = new TextEncoder('utf-8').encode(data);
+  if (this.queue.length >= 2) {
+    this.queue[this.queue.length - 1] = Int8Array.from([...this.queue[this.queue.length - 1], ...view]);
+  } else {
+    this.queue.push(view);
+  }
+
+  if (this.queue.length == 1) {
+    return sendLoop();
+  }
+}
 
 webusb.connect = function () {
   return webusb.get().then(device => {
