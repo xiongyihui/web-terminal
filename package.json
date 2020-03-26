@@ -1,7 +1,7 @@
 {
-  "name": "webusb-terminal",
+  "name": "web-terminal",
   "version": "1.0.0",
-  "description": "Web Terminal over WebUSB",
+  "description": "A web terminal to connect your device with WebBluetooth or WebUSB",
   "main": "src/index.js",
   "author": "Yihui Xiong",
   "license": "MIT",

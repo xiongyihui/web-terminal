@@ -1,6 +1,7 @@
 import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 import { webusb } from './webusb';
+import { serial } from './ble';
 
 import './style.css';
 import '../node_modules/xterm/css/xterm.css';
@@ -17,7 +18,7 @@ window.onload = () => {
   var showConnectUI = () => {
     document.getElementById('disconnect').style.display = 'none';
     document.getElementById('container').style.display = 'flex';
-    terminal.onData(() => { });
+    terminal.onData(() => {});
   }
 
   var showDisconnectUI = () => {
@@ -25,12 +26,17 @@ window.onload = () => {
     document.getElementById('disconnect').style.display = 'block';
   }
 
-  document.getElementById('connect').onclick = () => {
-    webusb.connect().then(device => {
+  var setup = device => {
       console.log('connected');
       showDisconnectUI();
       terminal.focus();
-      webusb.device = device;
+      console.log(device);
+      document.getElementById('disconnect').onclick = () => {
+        if (device) {
+          device.disconnect();
+        }
+        showConnectUI();
+      };
 
       device.onReceive = data => {
         let textDecoder = new TextDecoder();
@@ -39,21 +45,20 @@ window.onload = () => {
         terminal.write(text);
       };
 
-      device.onReceiveError = error => {
-        console.log(error);
+      device.onDisconnect = () => {
         showConnectUI();
       };
 
       terminal.onData(data => {
         device.send(data);
       });
-    });
+    };
+
+  document.getElementById('connect').onclick = () => {
+    webusb.connect().then(setup);
   };
 
-  document.getElementById('disconnect').onclick = () => {
-    if (webusb.device) {
-      webusb.device.disconnect();
-    }
-    showConnectUI();
+  document.getElementById('bt-connect').onclick = () => {
+    serial.connect().then(setup);
   };
 };

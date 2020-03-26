@@ -36,7 +36,8 @@ webusb.Device.prototype.connect = function () {
       this.onReceive(result.data);
       readLoop();
     }, error => {
-      this.onReceiveError(error);
+      console.log(error);
+      this.onDisconnect();
     });
   };
 
@@ -95,7 +96,7 @@ webusb.Device.prototype.send = function(data) {
   if (this.queue.length == 1) {
     return sendLoop();
   }
-}
+};
 
 webusb.connect = function () {
   return webusb.get().then(device => {
