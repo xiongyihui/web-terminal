@@ -1,0 +1,62 @@
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  margin: 0px;
+  background: black;
+}
+
+#connect {
+  background-color: rgb(51,105,232);
+  border: none;
+  border-radius: 4px;
+  margin: 4px 2px;
+  height: 32px;
+  width: 120px;
+  color: white;
+  text-align: center;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#terminal {
+  position: fixed;
+  top: 40px;
+  bottom: 0%;
+  width: 100%;
+}
+
+#github:hover .octo-arm {
+  animation: octocat-wave 560ms ease-in-out
+}
+
+@keyframes octocat-wave {
+
+  0%,
+  100% {
+    transform: rotate(0)
+  }
+
+  20%,
+  60% {
+    transform: rotate(-25deg)
+  }
+
+  40%,
+  80% {
+    transform: rotate(10deg)
+  }
+}
+
+@media (max-width:500px) {
+  .github-corner:hover .octo-arm {
+    animation: none
+  }
+
+  .github-corner .octo-arm {
+    animation: octocat-wave 560ms ease-in-out
+  }
+}
