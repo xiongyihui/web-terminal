@@ -1,10 +1,10 @@
-import { Terminal } from 'xterm';
-import { FitAddon } from 'xterm-addon-fit';
+import { Terminal } from '@xterm/xterm';
+import { FitAddon } from '@xterm/addon-fit';
 import { webusb } from './webusb';
 import { serial } from './ble';
 
 import './style.css';
-import '../node_modules/xterm/css/xterm.css';
+import '../node_modules/@xterm/xterm/css/xterm.css';
 
 const terminal = new Terminal();
 const fitAddon = new FitAddon();
